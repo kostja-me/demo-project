@@ -3,21 +3,20 @@ build_settings:
   build_command: npm i && npm run tailwind:build
   environment_variables:
     - name: APPLIKU
-      value: 'true'
+      value: "true"
 
 services:
-  - name: web
+  web:
     command: bash web.sh
-
-  - name: worker
+  worker:
     command: bash celery-worker.sh
-
-  - name: beat
+  beat:
     command: bash celery-beat.sh
-
-  - name: release
+  release:
     command: bash release.sh
 
 databases:
-  - type: postgresql_17
-  - type: redis_7
+  db:
+    type: postgresql_17
+  redis:
+    type: redis_7
