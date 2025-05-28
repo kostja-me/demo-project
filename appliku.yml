@@ -18,5 +18,7 @@ services:
 databases:
   db:
     type: postgresql_17
+  db2:
+    type: postgresql_17
   redis:
     type: redis_7
