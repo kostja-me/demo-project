@@ -4,11 +4,11 @@ build_settings:
   environment_variables:
     - name: APPLIKU
       value: "true"
-    - name: DATABASE_URL3
+    - name: DATABASE_URL
       fromDatabase:
         name: db
         property: connectionURL
-    - name: REDIS_URL2
+    - name: REDIS_URL
       fromDatabase:
         name: redis
         property: privateConnectionURL
