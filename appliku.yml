@@ -39,4 +39,4 @@ cronjobs:
     command: python manage.py send_emails
   fetch_rss:
     schedule: "*/10 * * * *"
-    command: python manage.py fetch_rss
+    command: python manage.py fetch_rss_feeds
