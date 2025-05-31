@@ -30,3 +30,6 @@ databases:
     type: postgresql_17
   redis:
     type: redis_7
+  db444:
+    type: postgresql_17
+
