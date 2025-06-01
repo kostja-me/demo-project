@@ -5,13 +5,13 @@ build_settings:
     - name: APPLIKU
       value: "true"
     - name: DATABASE_URL
-      fromDatabase:
+      from_database:
         name: db
-        property: connectionURL
+        property: connection_url
     - name: REDIS_URL
-      fromDatabase:
+      from_database:
         name: redis
-        property: privateConnectionURL
+        property: private_connection_url
 
 services:
   web:
