@@ -40,3 +40,11 @@ cronjobs:
   fetch_rss2:
     schedule: "*/10 * * * *"
     command: python manage.py fetch_rss_feeds
+
+volumes:
+  data:
+    target: /data/
+  media:
+    target: /media/
+    url: /media/
+    environment_variable: MEDIA
