@@ -1,9 +1,8 @@
 build_settings:
   build_image: python-3.13-node-20.18
-  build_command: npm i && npm run tailwind:build
   environment_variables:
     - name: APPLIKU
-      value: "true"
+      value: 'true'
     - name: DATABASE_URL
       from_database:
         name: db
@@ -11,36 +10,67 @@ build_settings:
     - name: REDIS_URL
       from_database:
         name: redis
-        property: private_connection_url
-
+        property: connection_url
+  build_command: npm i && npm run tailwind:build
 services:
-  web:
-    command: bash web.sh
-  worker:
-    command: bash celery-worker.sh
   beat:
+    scale: 1
     command: bash celery-beat.sh
+    mode: replicated
+  browserlessfirefox:
+    scale: 1
+    image: ghcr.io/browserless/firefox
+    mode: replicated
+  datadog1:
+    scale: 1
+    environment:
+      - name: DD_SITE
+        value: datadoghq.com
+      - name: DD_API_KEY
+        value: your_datadog_api_key
+      - name: DD_APM_ENABLED
+        value: 'true'
+      - name: DD_AGENT_MAJOR_VERSION
+        value: '7'
+      - name: DD_PROCESS_AGENT_ENABLED
+        value: 'true'
+    image: datadog/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+    ports:
+      - '3000'
+      - 3000-3005
+      - 9090-9091:8080-8081
+      - 49100:22
+      - 127.0.0.1:5000-5010:5000-5010
+      - ::1:6000:6000
+      - '[::1]:6001:6001'
+      - 6060:6060/udp
+    mode: global
   release:
     command: bash release.sh
-
+  web:
+    scale: 1
+    command: bash web.sh
+    mode: replicated
+  worker:
+    scale: 1
+    command: bash celery-worker.sh
+    mode: replicated
 databases:
-  db:
-    type: postgresql_17
-  db2:
-    type: postgresql_17
   redis:
     type: redis_7
-  db444:
+  db:
     type: postgresql_17
-
 cronjobs:
-  send_emails:
-    schedule: "0 * * * *"
-    command: python manage.py send_emails
   fetch_rss2:
-    schedule: "*/10 * * * *"
+    schedule: '*/10 * * * *'
     command: python manage.py fetch_rss_feeds
-
+  send_emails:
+    schedule: 0 * * * *
+    command: python manage.py send_emails
 volumes:
   data:
     target: /data/
