@@ -24,34 +24,6 @@ services:
     scale: 1
     image: ghcr.io/browserless/firefox
     mode: replicated
-  datadog1:
-    scale: 1
-    environment:
-      - name: DD_SITE
-        value: datadoghq.com
-      - name: DD_API_KEY
-        value: your_datadog_api_key
-      - name: DD_APM_ENABLED
-        value: 'true'
-      - name: DD_AGENT_MAJOR_VERSION
-        value: '7'
-      - name: DD_PROCESS_AGENT_ENABLED
-        value: 'true'
-    image: datadog/agent:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc:/host/proc:ro
-      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
-    ports:
-      - '3000'
-      - 3000-3005
-      - 9090-9091:8080-8081
-      - 49100:22
-      - 127.0.0.1:5000-5010:5000-5010
-      - ::1:6000:6000
-      - '[::1]:6001:6001'
-      - 6060:6060/udp
-    mode: global
   release:
     command: bash release.sh
   web:
