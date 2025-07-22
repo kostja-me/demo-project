@@ -10,8 +10,11 @@ build_settings:
     - name: REDIS_URL
       from_database:
         name: redis
-        property: connection_url
-  build_command: npm i && npm run tailwind:build
+        property: private_connection_url
+    - name: APPLIKUAPPID
+      source: manual
+    - name: APPLIKUAPIKEY
+      source: manual
 services:
   beat:
     scale: 1
