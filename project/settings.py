@@ -153,8 +153,35 @@ LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {"console": {"class": "logging.StreamHandler"}},
-    "loggers": {"": {"handlers": ["console"], "level": "DEBUG"}},
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "axiom": {
+            "class": "axiom.AxiomHandler",
+            "dataset": env("AXIOM_DATASET", default="django-logs"),
+            "token": env("AXIOM_TOKEN", default=""),
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"] + (["axiom"] if env("AXIOM_TOKEN", default="") else []),
+            "level": "INFO",
+        },
+        "django": {
+            "handlers": ["console"] + (["axiom"] if env("AXIOM_TOKEN", default="") else []),
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
 }
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
