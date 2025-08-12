@@ -1,4 +1,6 @@
 from pathlib import Path
+
+import axiom_py
 import environ
 import os
 from django.urls import reverse_lazy
@@ -167,7 +169,8 @@ LOGGING = {
         "axiom": {
             "class": "axiom_py.logging.AxiomHandler",
             "dataset": env("AXIOM_DATASET", default="django-logs"),
-            "token": env("AXIOM_TOKEN", default=""),
+            "client": axiom_py.Client(token=env("AXIOM_TOKEN", default="")),
+            # "client": env("AXIOM_TOKEN", default=""),
             "formatter": "verbose",
         },
     },
