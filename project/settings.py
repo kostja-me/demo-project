@@ -165,7 +165,7 @@ LOGGING = {
             "formatter": "verbose",
         },
         "axiom": {
-            "class": "axiom.AxiomHandler",
+            "class": "axiom_py.logging.AxiomHandler",
             "dataset": env("AXIOM_DATASET", default="django-logs"),
             "token": env("AXIOM_TOKEN", default=""),
             "formatter": "verbose",
