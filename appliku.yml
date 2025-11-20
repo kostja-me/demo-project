@@ -1,52 +1,48 @@
-build_settings:
-  build_image: python-3.13-node-20.18
-  environment_variables:
-    - name: APPLIKU
-      value: 'true'
-    - name: DATABASE_URL
-      from_database:
-        name: db
-        property: connection_url
-    - name: REDIS_URL
-      from_database:
-        name: redis
-        property: private_connection_url
-    - name: APPLIKUAPPID
-      source: manual
-    - name: APPLIKUAPIKEY
-      source: manual
-services:
-  beat:
-    scale: 1
-    command: bash celery-beat.sh
-    mode: replicated
-
-  release:
-    command: bash release.sh
-  web:
-    scale: 1
-    command: bash web.sh
-    mode: replicated
-  worker:
-    scale: 1
-    command: bash celery-worker.sh
-    mode: replicated
-databases:
-  redis:
-    type: redis_7
-  db:
-    type: postgresql_17
-cronjobs:
-  fetch_rss2:
-    schedule: '*/10 * * * *'
-    command: python manage.py fetch_rss_feeds
-  send_emails:
-    schedule: 0 * * * *
-    command: python manage.py send_emails
-volumes:
-  data:
-    target: /data/
-  media:
-    target: /media/
-    url: /media/
-    environment_variable: MEDIA
+"build_settings":
+  "build_image": "python-3.13-node-20.18"
+  "environment_variables":
+    - "name": "APPLIKUAPPID"
+      "value": ""
+    - "name": "APPLIKUAPIKEY"
+      "value": ""
+    - "name": "APPLIKU"
+      "value": "true"
+    - "name": "DATABASE_URL"
+      "from_database":
+        "name": "db"
+        "property": "private_connection_url"
+    - "name": "REDIS_URL"
+      "from_database":
+        "name": "redis"
+        "property": "private_connection_url"
+"services":
+  "beat":
+    "scale": 0
+    "command": "bash celery-beat.sh"
+  "release":
+    "command": "bash release.sh"
+  "web":
+    "scale": 0
+    "command": "bash web.sh"
+  "worker":
+    "scale": 0
+    "command": "bash celery-worker.sh"
+"databases":
+  "redis":
+    "type": "redis_8"
+  "db":
+    "type": "postgresql_18"
+"cronjobs":
+  "send_emails":
+    "schedule": "0 * * * *"
+    "command": "python manage.py send_emails"
+  "fetch_rss2":
+    "schedule": "*/10 * * * *"
+    "command": "python manage.py fetch_rss_feeds"
+"volumes":
+  "data":
+    "target": "/data/"
+  "media":
+    "target": "/media/"
+    "url": "/media/"
+    "environment_variable": "MEDIA"
